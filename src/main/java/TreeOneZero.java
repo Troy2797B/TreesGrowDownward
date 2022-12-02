@@ -33,11 +33,58 @@ public class TreeOneZero {
         if(current.value.equals(value)){
             return true;
         }
-        if (current.value > value){
-            current.left = containsNodeRecursive(current.left, value);
-            return false;
-        } else if (current.value < value){
-            current.right = containsNodeRecursive(current.right, value);
+//        if (current.value > value){
+//            current.left = containsNodeRecursive(current.left, value);
+//            return false;
+//        } else if (current.value < value){
+//            current.right = containsNodeRecursive(current.right, value);
+//        }
+        return value < current.value
+                ? containsNodeRecursive(current.left, value)
+                : containsNodeRecursive(current.right, value);
+    }
+
+    public boolean containsNode(Integer value){
+        return containsNodeRecursive(root, value);
+    }
+    //in the method below, we are returning the node that we are removing wtf
+    private Node deleteRecursive(Node current, Integer value){
+        if(current == null){
+            return null;
+        }
+        if (current.left == null){
+            return current.right;
+        } else if (current.right == null){
+            return current.left;
+        }
+        int smallestValue = findSmallestValue(current.right);
+        current.value = smallestValue;
+        current.right = deleteRecursive(current.right, smallestValue);
+        return current;
+    }
+
+    private int findSmallestNode(Node n){
+        if (n.left == null){
+            return n.value;
+        } else {return findSmallestNode(n);}
+    }
+    public void delete (Integer value){
+        root = deleteRecursive(root,value);
+    }
+
+    public void traverseInOrder(Node node) {
+        if (node != null) {
+            traverseInOrder(node.left);
+            System.out.print(" " + node.value);
+            traverseInOrder(node.right);
+        }
+    }
+
+    public void traversePreOrder(Node node){
+        if (node != null) {
+            System.out.print(" " + node.value);
+            traversePreOrder(node.left);
+            traversePreOrder(node.right);
         }
     }
 }
